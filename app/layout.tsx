@@ -17,6 +17,9 @@ export async function generateMetadata(): Promise<Metadata> {
     title: "Inkerin Sudet — детский хоккейный клуб",
     description:
       "Ингерманландские волки — детский хоккейный клуб в Санкт-Петербурге для игроков от 5 до 14 лет.",
+    authors: [{ name: "Ян Ковру" }],
+    creator: "Ян Ковру",
+    publisher: "Ян Ковру",
     icons: {
       icon: "/brand/crest-blue.png",
       shortcut: "/brand/crest-blue.png",

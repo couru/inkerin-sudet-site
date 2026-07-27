@@ -253,7 +253,8 @@ export default function Home() {
         </div>
         <div className="footerMeta">
           <span>Вымышленный клуб · Портфолио</span>
-          <span>© 2026</span>
+          <span>Идея, логотипы и сайт принадлежат Яну Ковру</span>
+          <span>© 2026 Ян Ковру · Все права защищены</span>
         </div>
       </footer>
     </main>
