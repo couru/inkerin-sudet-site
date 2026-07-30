@@ -17,3 +17,12 @@ npm run dev
 ```bash
 npm test
 ```
+
+## GitHub Pages
+
+Сайт автоматически собирается и публикуется из ветки `main` с помощью GitHub Actions:
+
+https://couru.github.io/inkerin-sudet-site/
+
+Пути к стилям, скриптам и изображениям относительные, поэтому сайт работает в каталоге
+репозитория GitHub Pages. Текущее размещение и файл `.openai/hosting.json` сохранены.
