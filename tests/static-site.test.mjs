@@ -20,6 +20,10 @@ test("builds a framework-free static site", async () => {
   assert.equal(output, source);
   assert.match(script, /IntersectionObserver/);
   assert.match(stylesheet, /overflow-x: clip/);
+  assert.match(stylesheet, /font-family: "Inkerin Sans"/);
+  assert.match(stylesheet, /RobotoCondensed-Variable\.ttf/);
+  assert.doesNotMatch(stylesheet, /font-family:\s*(?:Impact|"Courier New"|Arial)/);
   assert.match(stylesheet, /@media \(max-width: 900px\)/);
+  await access(new URL("../public/fonts/RobotoCondensed-Variable.ttf", import.meta.url));
   await access(new URL("../dist/server/index.js", import.meta.url));
 });

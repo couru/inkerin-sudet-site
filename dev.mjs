@@ -15,7 +15,9 @@ const server = createServer((request, response) => {
   const path = decodeURIComponent(new URL(request.url, "http://localhost").pathname);
   const relative = path === "/" ? "index.html" : path.replace(/^\/+/, "");
   let file = normalize(join(root, relative));
-  if (relative.startsWith("brand/") || relative === "og.png") file = normalize(join(root, "public", relative));
+  if (relative.startsWith("brand/") || relative.startsWith("fonts/") || relative === "og.png") {
+    file = normalize(join(root, "public", relative));
+  }
   if (!file.startsWith(normalize(root)) || !existsSync(file) || statSync(file).isDirectory()) {
     response.writeHead(404).end("Not found");
     return;
