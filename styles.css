@@ -811,6 +811,9 @@ main {
 
 .kitContent h2 {
   font-size: clamp(54px, 5.8vw, 90px);
+  hyphens: none;
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
 .kitContent h2 span {
@@ -1563,6 +1566,11 @@ footer {
 
   .hero h1 {
     font-size: clamp(64px, 23vw, 88px);
+  }
+
+  .kitContent h2 {
+    font-size: clamp(50px, 16vw, 64px);
+    letter-spacing: -1.5px;
   }
 
   .heroStats {
