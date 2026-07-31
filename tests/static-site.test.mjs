@@ -12,6 +12,7 @@ test("builds a framework-free static site", async () => {
 
   assert.match(source, /<html lang="ru">/);
   assert.match(source, /id="trial-form"/);
+  assert.match(source, /href="\.\/styles\.css\?v=20260731"/);
   assert.match(source, /src="\.\/script\.js"/);
   assert.match(source, /class="brandEmblem"[\s\S]*src="\.\/brand\/crest-blue\.png"/);
   assert.match(source, /href="mailto:couru@mail\.ru">couru@mail\.ru<\/a>/);
