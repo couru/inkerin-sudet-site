@@ -12,7 +12,7 @@ test("builds a framework-free static site", async () => {
 
   assert.match(source, /<html lang="ru">/);
   assert.match(source, /id="trial-form"/);
-  assert.match(source, /href="\.\/styles\.css\?v=20260731"/);
+  assert.match(source, /href="\.\/styles\.css\?v=20260731-2"/);
   assert.match(source, /src="\.\/script\.js"/);
   assert.match(source, /class="brandEmblem"[\s\S]*src="\.\/brand\/crest-blue\.png"/);
   assert.match(source, /href="mailto:couru@mail\.ru">couru@mail\.ru<\/a>/);
@@ -24,6 +24,7 @@ test("builds a framework-free static site", async () => {
   assert.match(stylesheet, /font-family: "Inkerin Sans"/);
   assert.match(stylesheet, /RobotoCondensed-Variable\.ttf/);
   assert.doesNotMatch(stylesheet, /font-family:\s*(?:Impact|"Courier New"|Arial)/);
+  assert.match(stylesheet, /\.age strong\s*\{[\s\S]*?white-space: nowrap;/);
   assert.match(stylesheet, /@media \(max-width: 900px\)/);
   await access(new URL("../public/fonts/RobotoCondensed-Variable.ttf", import.meta.url));
   await access(new URL("../dist/server/index.js", import.meta.url));

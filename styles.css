@@ -714,6 +714,7 @@ main {
   font-size: clamp(100px, 11vw, 176px);
   letter-spacing: -7px;
   line-height: 1;
+  white-space: nowrap;
 }
 
 .age small {
@@ -1443,6 +1444,11 @@ footer {
 
   .age strong {
     font-size: 136px;
+  }
+
+  .groupCard3 .age strong {
+    font-size: clamp(82px, 27vw, 110px);
+    letter-spacing: -4px;
   }
 
   .kitSection {
