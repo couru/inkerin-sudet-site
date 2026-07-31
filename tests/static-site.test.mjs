@@ -17,6 +17,9 @@ test("builds a framework-free static site", async () => {
   assert.match(source, /class="brandEmblem"[\s\S]*src="\.\/brand\/crest-blue\.png"/);
   assert.match(source, /<small>ингерманландские волки<\/small>/);
   assert.match(source, /href="mailto:couru@mail\.ru">couru@mail\.ru<\/a>/);
+  assert.match(source, /Название, концепция бренда и сайт созданы Яном Ковру/);
+  assert.match(source, /Эмблема создана с использованием ИИ по авторской концепции Яна Ковру/);
+  assert.match(source, /Бренд и сайт доступны к покупке/);
   assert.doesNotMatch(source, /(?:В СТАЕ|ИГРА|ОДНА ЦЕЛЬ|ЛЁД)\.<\/span>/);
   assert.doesNotMatch(source, /(?:src|href|content)="\/(?:brand|og\.png|styles\.css|script\.js)/);
   assert.doesNotMatch(source, /__NEXT_DATA__|react|next\//i);
