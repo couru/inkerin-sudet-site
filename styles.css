@@ -14,6 +14,7 @@
 }
 
 html {
+  overflow-x: clip;
   scroll-behavior: smooth;
 }
 
@@ -22,7 +23,14 @@ body {
   background: var(--ice);
   color: var(--ink);
   font-family: Arial, Helvetica, sans-serif;
+  min-width: 0;
+  overflow-wrap: break-word;
   text-rendering: optimizeLegibility;
+}
+
+img {
+  display: block;
+  max-width: 100%;
 }
 
 .skip-link {
@@ -104,6 +112,28 @@ main {
   gap: 14px;
 }
 
+.brand {
+  min-width: 0;
+}
+
+.brandEmblem {
+  background: var(--white);
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(255, 184, 0, 0.13);
+  flex: 0 0 auto;
+  height: 60px;
+  overflow: hidden;
+  width: 60px;
+}
+
+.brandEmblem img {
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.08);
+  width: 100%;
+}
+
 .brandMark {
   align-items: center;
   background: var(--gold);
@@ -121,6 +151,7 @@ main {
 .brandText {
   display: grid;
   gap: 3px;
+  min-width: 0;
 }
 
 .brandText strong {
@@ -201,6 +232,7 @@ main {
 
 .heroContent {
   align-self: center;
+  min-width: 0;
   padding: 70px 4vw 76px 8vw;
   position: relative;
   z-index: 2;
@@ -349,6 +381,7 @@ main {
   display: flex;
   justify-content: center;
   min-height: 650px;
+  min-width: 0;
   position: relative;
   z-index: 2;
 }
@@ -418,12 +451,14 @@ main {
 }
 
 .visualCaption {
+  background: rgba(7, 19, 36, 0.9);
   bottom: 30px;
   color: var(--white);
   font-size: 9px;
   font-weight: 800;
   letter-spacing: 1.3px;
   margin: 0;
+  padding: 8px 10px;
   position: absolute;
   right: 28px;
   text-align: right;
@@ -496,6 +531,7 @@ main {
 
 .manifestoCopy {
   border-left: 1px solid var(--line);
+  min-width: 0;
   padding-left: 4vw;
 }
 
@@ -537,6 +573,7 @@ main {
   border-bottom: 1px solid var(--line);
   border-right: 1px solid var(--line);
   min-height: 270px;
+  min-width: 0;
   padding: 25px;
   position: relative;
 }
@@ -608,6 +645,7 @@ main {
   background: var(--ice);
   color: var(--ink);
   min-height: 510px;
+  min-width: 0;
   overflow: hidden;
   padding: 23px;
   position: relative;
@@ -724,6 +762,7 @@ main {
 .kitImage {
   background: #090c10;
   min-height: 760px;
+  min-width: 0;
   overflow: hidden;
   position: relative;
 }
@@ -742,18 +781,21 @@ main {
 }
 
 .kitTag {
+  background: rgba(7, 19, 36, 0.88);
   bottom: 35px;
-  color: #9eacb9;
+  color: var(--white);
   font-family: "Courier New", monospace;
   font-size: 9px;
   left: 35px;
   letter-spacing: 1px;
+  padding: 8px 10px;
   position: absolute;
   z-index: 2;
 }
 
 .kitContent {
   align-self: center;
+  min-width: 0;
   padding: 80px 8vw 80px 6vw;
 }
 
@@ -820,6 +862,13 @@ main {
 
 .scheduleIntro h2 {
   font-size: clamp(56px, 6vw, 94px);
+}
+
+.scheduleIntro,
+.scheduleList,
+.trialGrid > *,
+.sectionHead > * {
+  min-width: 0;
 }
 
 .scheduleIntro h2 span {
@@ -1046,13 +1095,61 @@ footer {
   font-weight: 800;
 }
 
+.footerBrand,
+.footerContact,
+.footerMeta {
+  min-width: 0;
+}
+
 @media (max-width: 1100px) {
   .siteHeader {
-    grid-template-columns: 1fr auto;
+    gap: 10px;
+    grid-template-columns: minmax(0, 1fr) auto auto;
   }
 
   .siteHeader nav {
-    display: none;
+    align-items: center;
+    background: var(--ink);
+    box-shadow: 0 18px 35px rgba(2, 9, 18, 0.28);
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    inset: 88px 0 auto;
+    opacity: 0;
+    padding: 42px 20px;
+    pointer-events: none;
+    position: absolute;
+    transform: translateY(-12px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .siteHeader nav.isOpen {
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+  }
+
+  .siteHeader nav a {
+    font-size: 17px;
+  }
+
+  .menuButton {
+    display: block;
+    justify-self: end;
+    position: relative;
+    z-index: 12;
+  }
+
+  .menuButton[aria-expanded="true"] > span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .menuButton[aria-expanded="true"] > span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .menuButton[aria-expanded="true"] > span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
   }
 
   .hero {
@@ -1068,7 +1165,15 @@ footer {
   }
 
   .heroCrest {
+    max-width: calc(100% - 20px);
     width: 52vw;
+  }
+
+  .trialKicker {
+    margin-left: -5vw;
+    margin-right: -5vw;
+    padding-left: 5vw;
+    padding-right: 5vw;
   }
 
   .manifesto {
@@ -1086,13 +1191,14 @@ footer {
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 900px) {
   body.menuOpen {
     overflow: hidden;
   }
 
   .siteHeader {
-    min-height: 72px;
+    gap: 8px;
+    min-height: 78px;
     padding: 0 20px;
   }
 
@@ -1121,7 +1227,7 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 28px;
-    inset: 72px 0 auto;
+    inset: 78px 0 auto;
     opacity: 0;
     padding: 42px 20px;
     pointer-events: none;
@@ -1144,9 +1250,14 @@ footer {
     display: none;
   }
 
-  .brandMark {
-    height: 42px;
-    width: 38px;
+  .brandEmblem {
+    height: 48px;
+    width: 48px;
+  }
+
+  .brandText strong {
+    font-size: 15px;
+    letter-spacing: 0.8px;
   }
 
   .headerCta {
@@ -1229,12 +1340,12 @@ footer {
   }
 
   .heroCrest {
-    width: min(115vw, 560px);
+    width: min(92vw, 520px);
   }
 
   .crestHalo {
-    height: 95vw;
-    width: 95vw;
+    height: min(88vw, 520px);
+    width: min(88vw, 520px);
   }
 
   .heroBadge {
@@ -1243,7 +1354,6 @@ footer {
   }
 
   .visualCaption {
-    background: var(--ink);
     bottom: 14px;
     line-height: 1.45;
     padding: 8px 10px;
@@ -1336,7 +1446,9 @@ footer {
   }
 
   .kitContent {
+    align-self: stretch;
     padding: 75px 20px;
+    width: 100%;
   }
 
   .scheduleSection {
@@ -1399,6 +1511,88 @@ footer {
   .footerMeta {
     justify-self: start;
     text-align: left;
+  }
+}
+
+@media (max-width: 520px) {
+  .siteHeader {
+    padding: 0 14px;
+  }
+
+  .brand,
+  .footerBrand {
+    gap: 9px;
+  }
+
+  .brandText strong {
+    font-size: 13px;
+  }
+
+  .headerCta {
+    min-height: 42px;
+    min-width: 42px;
+  }
+
+  .headerCta::before {
+    content: "";
+  }
+
+  .headerCta span {
+    margin-left: 0;
+  }
+
+  .heroContent {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .hero h1 {
+    font-size: clamp(64px, 23vw, 88px);
+  }
+
+  .heroStats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .heroStats div {
+    margin-right: 8px;
+    padding-right: 8px;
+  }
+
+  .heroStats span {
+    font-size: 8px;
+    letter-spacing: 0.35px;
+  }
+
+  .principlesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .principleCard {
+    min-height: 220px;
+  }
+
+  .scheduleRow {
+    grid-template-columns: 38px 72px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 380px) {
+  .brandText {
+    display: none;
+  }
+
+  .heroActions {
+    width: 100%;
+  }
+
+  .heroStats strong {
+    font-size: 21px;
+  }
+
+  .age strong {
+    font-size: 118px;
   }
 }
 
