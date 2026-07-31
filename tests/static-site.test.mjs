@@ -12,9 +12,10 @@ test("builds a framework-free static site", async () => {
 
   assert.match(source, /<html lang="ru">/);
   assert.match(source, /id="trial-form"/);
-  assert.match(source, /href="\.\/styles\.css\?v=20260731-3"/);
+  assert.match(source, /href="\.\/styles\.css\?v=20260731-4"/);
   assert.match(source, /src="\.\/script\.js"/);
   assert.match(source, /class="brandEmblem"[\s\S]*src="\.\/brand\/crest-blue\.png"/);
+  assert.match(source, /<small>ингерманландские волки<\/small>/);
   assert.match(source, /href="mailto:couru@mail\.ru">couru@mail\.ru<\/a>/);
   assert.doesNotMatch(source, /(?:В СТАЕ|ИГРА|ОДНА ЦЕЛЬ|ЛЁД)\.<\/span>/);
   assert.doesNotMatch(source, /(?:src|href|content)="\/(?:brand|og\.png|styles\.css|script\.js)/);

@@ -170,10 +170,11 @@ main {
 }
 
 .brandText small {
-  color: #95a8bd;
+  color: #8fa6ba;
   font-size: 9px;
   letter-spacing: 1.4px;
-  text-transform: uppercase;
+  line-height: 1.2;
+  text-transform: none;
 }
 
 .siteHeader nav {
@@ -1260,7 +1261,7 @@ footer {
   }
 
   .brandText small {
-    display: none;
+    display: block;
   }
 
   .brandEmblem {
@@ -1546,6 +1547,11 @@ footer {
     font-size: 13px;
   }
 
+  .brandText small {
+    font-size: 7px;
+    letter-spacing: 0.65px;
+  }
+
   .headerCta {
     min-height: 42px;
     min-width: 42px;
@@ -1603,7 +1609,16 @@ footer {
 
 @media (max-width: 380px) {
   .brandText {
-    display: none;
+    display: grid;
+  }
+
+  .brandText strong {
+    font-size: 11.5px;
+  }
+
+  .brandText small {
+    font-size: 6.5px;
+    letter-spacing: 0.45px;
   }
 
   .heroActions {
