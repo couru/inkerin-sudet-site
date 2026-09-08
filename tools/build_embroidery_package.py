@@ -13,6 +13,7 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "public" / "assets" / "production"
+SOURCE_PNG = ROOT / "tools" / "source" / "inkerin-sudet-cap-emblem-color-master.png"
 PNG = OUT / "inkerin-sudet-cap-emblem-embroidery.png"
 SVG = OUT / "inkerin-sudet-cap-emblem-embroidery.svg"
 EPS = OUT / "inkerin-sudet-cap-emblem-embroidery.eps"
@@ -20,7 +21,7 @@ PREVIEW = OUT / "inkerin-sudet-cap-emblem-black-cap-preview.png"
 ZIP = OUT / "inkerin-sudet-cap-emblem-production-package.zip"
 README = OUT / "README.md"
 
-PALETTE = np.array(
+SOURCE_PALETTE = np.array(
     [
         (8, 12, 17),       # near-black
         (255, 255, 255),   # white
@@ -31,6 +32,21 @@ PALETTE = np.array(
         (225, 25, 42),     # muted red
     ],
     dtype=np.int16,
+)
+
+# Palette sampled from the approved dark Karjalan Karhut embroidery reference.
+# Black is supplied by the cap fabric, not by thread.
+THREAD_PALETTE = np.array(
+    [
+        (5, 6, 6),         # transparent / black cap fabric
+        (81, 84, 87),      # light graphite
+        (58, 61, 64),      # medium graphite
+        (34, 36, 38),      # dark graphite
+        (116, 104, 78),    # graphite gold
+        (43, 77, 98),      # muted dark blue
+        (123, 48, 47),     # muted dark red
+    ],
+    dtype=np.uint8,
 )
 
 
@@ -63,14 +79,16 @@ def remove_checkerboard(image: Image.Image) -> Image.Image:
 def quantize(image: Image.Image, size: int = 700) -> tuple[Image.Image, np.ndarray]:
     image.thumbnail((size, size), Image.Resampling.LANCZOS)
     rgba = np.asarray(image)
-    rgb = rgba[:, :, :3].astype(np.int16)
-    dist = ((rgb[:, :, None, :] - PALETTE[None, None, :, :]) ** 2).sum(axis=3)
+    rgb = rgba[:, :, :3].astype(np.int32)
+    dist = ((rgb[:, :, None, :] - SOURCE_PALETTE[None, None, :, :]) ** 2).sum(axis=3)
     labels = dist.argmin(axis=2).astype(np.uint8)
     alpha = rgba[:, :, 3]
     labels[alpha < 128] = 255
     out = np.zeros((*labels.shape, 4), dtype=np.uint8)
     visible = labels != 255
-    out[visible, :3] = PALETTE[labels[visible]].astype(np.uint8)
+    # Near-black artwork is left transparent so the black cap supplies it.
+    visible &= labels != 0
+    out[visible, :3] = THREAD_PALETTE[labels[visible]]
     out[visible, 3] = 255
     return Image.fromarray(out, "RGBA"), labels
 
@@ -132,7 +150,7 @@ def make_svg(labels: np.ndarray) -> str:
         '<desc>Seven flat thread colors; transparent areas represent black cap fabric. All artwork is vector paths.</desc>',
     ]
     # Paint broad colors first and detail colors last.
-    for idx in (4, 5, 6, 2, 3, 1, 0):
+    for idx in (4, 5, 6, 2, 3, 1):
         loops = boundary_loops(labels == idx)
         parts = []
         for loop in loops:
@@ -141,7 +159,7 @@ def make_svg(labels: np.ndarray) -> str:
             pts = simplify(loop + [loop[0]], 1.1)
             parts.append("M " + " L ".join(f"{x} {y}" for x, y in pts) + " Z")
         if parts:
-            color = "#%02X%02X%02X" % tuple(PALETTE[idx])
+            color = "#%02X%02X%02X" % tuple(THREAD_PALETTE[idx])
             chunks.append(f'<path fill="{color}" fill-rule="evenodd" d="{" ".join(parts)}"/>')
     chunks.append("</svg>")
     return "\n".join(chunks)
@@ -162,7 +180,7 @@ def make_preview(image: Image.Image) -> None:
 
 
 def main() -> None:
-    cleaned = remove_checkerboard(Image.open(PNG))
+    cleaned = remove_checkerboard(Image.open(SOURCE_PNG))
     artwork, labels = quantize(cleaned)
     artwork.save(PNG, optimize=True)
     SVG.write_text(make_svg(labels), encoding="utf-8")
@@ -177,3 +195,7 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+
+
