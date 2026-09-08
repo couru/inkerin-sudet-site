@@ -9,6 +9,8 @@ import zipfile
 import numpy as np
 from PIL import Image, ImageDraw
 
+from build_embroidery_package import remove_checkerboard
+
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "tools" / "source" / "inkerin-sudet-cap-emblem-color-master.png"
@@ -35,7 +37,7 @@ VARIANTS = {
 
 
 def labels_from_source(size: int = 700) -> np.ndarray:
-    image = Image.open(SOURCE).convert("RGBA")
+    image = remove_checkerboard(Image.open(SOURCE))
     image.thumbnail((size, size), Image.Resampling.LANCZOS)
     rgba = np.asarray(image)
     rgb = rgba[:, :, :3].astype(np.int32)
@@ -167,6 +169,7 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
 
 
 
