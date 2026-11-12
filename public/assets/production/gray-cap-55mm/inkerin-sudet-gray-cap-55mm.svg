@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48mm" height="55mm" viewBox="0 0 48 55">
+  <title>INKERIN SUDET — 55 mm embroidery for gray cap</title>
+  <desc>Artwork is 48 by 55 mm. All coordinates and stroke widths are in millimetres. Black within the crest is thread, not the gray cap fabric.</desc>
+  <!-- Near-black stitched field; the cap is visible outside this crest. -->
+  <path fill="#171719" d="M24 .65 Q26.2 2.05 28.3 3.4 Q35.6 3.8 41 6.65 L39.3 9.2 L45.65 12.15 L44.2 14.05 L47.35 16.2 L45.2 18.1 L45.2 28.4 C45.2 40.1 37.5 49.45 24 54.35 C10.5 49.45 2.8 40.1 2.8 28.4 L2.8 18.1 L.65 16.2 L3.8 14.05 L2.35 12.15 L8.7 9.2 L7 6.65 Q12.4 3.8 19.7 3.4 Q21.8 2.05 24 .65 Z" stroke="#ACACAD" stroke-width="1.3" stroke-linejoin="round" id="shield"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Open ends and simple continuous rails avoid narrow double borders. -->
+    <path stroke="#ACACAD" stroke-width="1.2" d="M8.7 9.2 L9.25 12.65 Q24 8.55 38.75 12.65 L39.3 9.2" id="banner"/>
+    <g stroke="#ACACAD" stroke-width="1.1" stroke-linecap="butt" aria-label="INKERIN" id="inkerin">
+      <path d="M11.35 7.3 L12.6 7.03 M12 7.2 V10.05 M11.4 10.2 L12.65 9.94
+               M14.28 9.6 V6.65 L16.62 9.15 V6.27
+               M18.4 6.05 V8.94 M20.65 5.85 L18.4 7.66 L20.7 8.74
+               M24.8 5.8 H22.4 V8.65 H24.8 M22.4 7.22 H24.38
+               M26.57 8.72 V5.87 L27.85 5.92 Q29.1 5.97 29.1 6.83 Q29.1 7.73 27.85 7.64 L26.57 7.53 M27.82 7.65 L29.15 8.98
+               M31 6.23 L32.45 6.4 M31.72 6.32 V9.23 M31 9.12 L32.45 9.34
+               M34.25 9.68 V6.78 L36.65 10.18 V7.28"/>
+    </g>
+    <g stroke="#ACACAD" stroke-width="1.85" stroke-linecap="butt" aria-label="SUDET" id="sudet">
+      <path d="M11.75 15.1 L10.9 14.52 L7.45 15.54 L6.78 16.32 V18.25 L7.32 18.8 L11.02 18.03 L11.75 18.58 V20.75 L11 21.5 L6.7 22.88
+               M14.45 14.26 V20.05 L15.15 20.64 L18.35 20.18 L19.05 19.48 V13.63
+               M21.7 19.91 V13.52 H25.02 L26.36 14.65 V18.64 L25.16 19.87 Z
+               M33.45 14.35 L29.04 13.72 V20.08 L33.5 20.78 M29.04 16.96 L32.73 17.51
+               M36.15 14.93 L41.65 16.44 M38.88 15.68 V22.31"/>
+    </g>
+    <!-- Wide horizontal accents and grouped pine silhouettes. -->
+    <path stroke="#737276" stroke-width="1.35" d="M5.08 24.47 H13.48 M34.52 24.47 H42.92 M8.9 37.78 H13.2 M34.8 37.78 H39.1" id="landscape"/>
+    <g stroke="#737276" stroke-width="1.1" id="pines">
+      <path id="pine-left" d="M6.05 34.4 L8.35 30.9 H7.18 L8.7 28.34 L10.22 30.9 H9.05 L11.35 34.4 Z M11.35 34.4 L12.6 32.1 H11.9 L13.1 29.98 L14.3 32.1 H13.6 L14.85 34.4 Z" fill="#737276"/>
+      <path d="M6.05 34.4 L8.35 30.9 H7.18 L8.7 28.34 L10.22 30.9 H9.05 L11.35 34.4 Z M11.35 34.4 L12.6 32.1 H11.9 L13.1 29.98 L14.3 32.1 H13.6 L14.85 34.4 Z" transform="translate(48 0) scale(-1 1)" fill="#737276"/>
+    </g>
+  </g>
+  <!-- Broad, closed facets replace the fine fur. -->
+  <g id="wolf" stroke-linejoin="round" stroke-linecap="round">
+    <path fill="#47484B" stroke="#47484B" stroke-width="1.2" d="M24 25.25 L20.8 24 L17.35 21.7 Q15.6 23.45 15.7 28.1 L13.48 31.65 L14.68 31.45 L12.65 35.3 L14.36 34.9 L13.35 38.67 L15.25 37.85 L15.4 40.5 L18.24 39.45 L19.8 42.4 L24 40.75 L28.2 42.4 L29.76 39.45 L32.6 40.5 L32.75 37.85 L34.65 38.67 L33.64 34.9 L35.35 35.3 L33.32 31.45 L34.52 31.65 L32.3 28.1 Q32.4 23.45 30.65 21.7 L27.2 24 Z"/>
+    <path fill="#737276" stroke="#737276" stroke-width="1.1" d="M17.55 24.28 Q16.97 26.04 17.44 28.22 L20.37 26.35 Z M30.45 24.28 Q31.03 26.04 30.56 28.22 L27.63 26.35 Z"/>
+    <path fill="#737276" stroke="#737276" stroke-width="1.15" d="M16.2 30.5 L19.05 28.1 L20.2 27.8 L22.75 30.05 L21.7 31.04 L19.46 29.57 Z M31.8 30.5 L28.95 28.1 L27.8 27.8 L25.25 30.05 L26.3 31.04 L28.54 29.57 Z"/>
+    <path fill="#ACACAD" stroke="#ACACAD" stroke-width="1.1" d="M15.7 33.95 L18.36 31.3 L20.17 31.79 L21.35 34.06 L19.18 33.88 L16.05 35.45 Z M32.3 33.95 L29.64 31.3 L27.83 31.79 L26.65 34.06 L28.82 33.88 L31.95 35.45 Z"/>
+    <path fill="#737276" stroke="#737276" stroke-width="1.15" d="M15.6 36.62 L17.95 35.08 L17.67 37.15 L19.25 38.77 L18.85 40 L16.21 39.18 Z M32.4 36.62 L30.05 35.08 L30.33 37.15 L28.75 38.77 L29.15 40 L31.79 39.18 Z"/>
+    <path fill="#ACACAD" stroke="#ACACAD" stroke-width="1.15" d="M24 31.15 L25.45 33.83 L28.32 35.03 L27.15 37.82 Q26.65 39.37 24 40.1 Q21.35 39.37 20.85 37.82 L19.68 35.03 L22.55 33.83 Z"/>
+    <path fill="none" stroke="#171719" stroke-width="1.2" d="M18.16 31.92 L19.7 33.17 M29.84 31.92 L28.3 33.17"/>
+    <path fill="#171719" d="M22.35 35.79 Q24 35.03 25.65 35.79 Q25.6 37.5 24 38.04 Q22.4 37.5 22.35 35.79 Z"/>
+  </g>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="#171719" stroke-width="4.65" d="M2.65 45.05 H42.2 Q43.85 44.95 44.9 42.15 L45.5 41.02" id="stick-keyline"/>
+    <path stroke="#ACACAD" stroke-width="2.45" d="M2.65 45.05 H42.2 Q43.85 44.95 44.9 42.15 L45.5 41.02" id="stick"/>
+    <path stroke="#47484B" stroke-width="1.25" stroke-linecap="butt" d="M5.05 43.83 V46.27 M7.48 43.83 V46.27" id="grip"/>
+  </g>
+  <path id="puck-badge" fill="#171719" stroke="#ACACAD" stroke-width="1.2" stroke-linejoin="round" d="M24 42.1 Q26.2 43.2 28.65 43.7 V47.15 Q28.65 49.7 24 51.6 Q19.35 49.7 19.35 47.15 V43.7 Q21.8 43.2 24 42.1 Z"/>
+  <path id="puck" fill="#737276" d="M21.45 46.45 H26.55 V47.65 C26.55 49.4 21.45 49.4 21.45 47.65 Z"/>
+  <ellipse fill="#ACACAD" cx="24" cy="46.45" rx="2.55" ry="1.1"/>
+</svg>
