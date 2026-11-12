@@ -4,11 +4,12 @@ from __future__ import annotations
 import ctypes as C
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import zipfile
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -45,6 +46,14 @@ class Bitmap(C.Structure):
     _fields_ = [("w", C.c_int), ("h", C.c_int), ("dy", C.c_int), ("map", C.POINTER(C.c_ulong))]
 
 
+class TraceParams(C.Structure):
+    # Public prefix of potrace_param_t. Lower alphamax keeps sharp corners.
+    _fields_ = [
+        ("turdsize", C.c_int), ("turnpolicy", C.c_int), ("alphamax", C.c_double),
+        ("opticurve", C.c_int), ("opttolerance", C.c_double),
+    ]
+
+
 def trace(mask: np.ndarray, lib) -> str:
     height, width = mask.shape
     words = (width + 31) // 32
@@ -52,6 +61,12 @@ def trace(mask: np.ndarray, lib) -> str:
     data = np.ascontiguousarray(packed.view(">u4"), dtype=np.uint32)
     bitmap = Bitmap(width, height, words, data.ctypes.data_as(C.POINTER(C.c_ulong)))
     param = lib.potrace_param_default()
+    if not param:
+        raise RuntimeError("Could not allocate Potrace parameters")
+    settings = C.cast(param, C.POINTER(TraceParams)).contents
+    settings.turdsize = 12
+    settings.alphamax = .65
+    settings.opttolerance = .12
     state = lib.potrace_trace(param, C.byref(bitmap))
     try:
         if not state or state.contents.status:
@@ -80,87 +95,20 @@ def trace(mask: np.ndarray, lib) -> str:
         lib.potrace_param_free(param)
 
 
-def disk(mask: np.ndarray, radius: int, dilate: bool) -> np.ndarray:
-    """Binary disk morphology, with a false border."""
-    h, w = mask.shape
-    padded = np.pad(mask, radius)
-    result = np.full_like(mask, not dilate)
-    combine = np.logical_or if dilate else np.logical_and
-    for dy in range(-radius, radius + 1):
-        for dx in range(-radius, radius + 1):
-            if dx * dx + dy * dy <= radius * radius:
-                y, x = radius + dy, radius + dx
-                combine(result, padded[y:y + h, x:x + w], out=result)
-    return result
-
-
-def opening(mask: np.ndarray, radius: int) -> np.ndarray:
-    return disk(disk(mask, radius, False), radius, True)
-
-
-def header_letters(bright: np.ndarray) -> np.ndarray:
-    """Separate the seven solid glyphs from the connected banner."""
-    x0, y0, x1, y1 = 153, 54, 478, 120
-    roi = bright[y0:y1, x0:x1]
-    regions = Image.fromarray(roi.astype(np.uint8), "L")
-    for x in range(roi.shape[1]):
-        ImageDraw.floodfill(regions, (x, 0), 2)
-        ImageDraw.floodfill(regions, (x, roi.shape[0] - 1), 2)
-    for y in range(roi.shape[0]):
-        ImageDraw.floodfill(regions, (0, y), 2)
-        ImageDraw.floodfill(regions, (roi.shape[1] - 1, y), 2)
-    letters = np.zeros_like(bright)
-    letters[y0:y1, x0:x1] = np.asarray(regions) == 1
-    return opening(letters, 2)
-
-
 def source_layers():
-    original = Image.open(SOURCE).convert("RGBA")
-    image = original.resize((627, 627), Image.Resampling.LANCZOS)
+    image = Image.open(SOURCE).convert("RGBA")
     rgba = np.asarray(image)
-    gray = np.asarray(image.convert("L").filter(ImageFilter.GaussianBlur(.65)))
-    silhouette = opening(rgba[..., 3] >= 128, 2)
+    gray = np.asarray(image.convert("L"))
+    silhouette = rgba[..., 3] >= 128
     ys, xs = np.nonzero(silhouette)
     x0, y0, x1, y1 = xs.min(), ys.min(), xs.max() + 1, ys.max() + 1
     width, height = int(x1 - x0), int(y1 - y0)
-    # Six tracing pixels are about 0.53 mm. Remove narrow stray islands
-    # while keeping normal corners and widening the recognizable light strokes.
-    radius = int(np.ceil(height / HEIGHT_MM / 2))
-    bright = gray >= 140
-    letters = header_letters(bright)
-    widened = disk(bright & ~disk(letters, 2, True), 2, True)
-    medium = opening((gray >= 94) & silhouette & ~disk(letters, 2, True), radius)
-    light = opening(widened & silhouette, radius)
-    # The banner rails are continuous: preserve their smooth long edges.
-    light[:142] = opening(widened & silhouette, 3)[:142]
-    light |= disk(letters, 1, True)
-    # Simplify the eyelights to rounded bands; retain the separation from the brow.
-    yy, xx = np.ogrid[:gray.shape[0], :gray.shape[1]]
-    eyes = np.s_[343:369, 263:362]
-    light[eyes] = opening(bright & silhouette, 2)[eyes]
-    for cx in (280.5, 346.5):
-        pupil = (xx - cx) ** 2 + (yy - 349.5) ** 2 <= 6.4 ** 2
-        light[pupil] = False
-        medium[pupil] = False
-    dark = opening((gray >= 43) & silhouette, radius)
-    # Avoid a thin extra shade tracing the entire crest and landscape.
-    dark[:221] = False
-    dark[487:] = False
-    dark[:, :197] = False
-    dark[:, 430:] = False
-    # Keep the tape bars separated by black rather than by gray artifacts.
-    for x in (83, 105, 127):
-        light[492:530, x:x + 12] = False
-        medium[492:530, x:x + 12] = False
-    grip = np.s_[493:530, 63:140]
-    medium[grip] = False
-    # Rebuild the small grip blocks as contiguous silver areas.
-    light[495:527, 89:127] |= ((xx >= 95) & (xx < 105) | (xx >= 117) & (xx < 127))[:, 89:127]
+    # Trace the tonal boundaries at source resolution, with no geometry edits.
     layers = [
-        ("shield-black", "#171719", silhouette),
-        ("dark-graphite", "#47484B", dark),
-        ("mid-graphite", "#737276", medium | light),
-        ("silver-graphite", "#ACACAD", light),
+        ("shield-black", "#070707", silhouette),
+        ("dark-graphite", "#4B4B4D", silhouette & (gray >= 43)),
+        ("mid-graphite", "#737175", silhouette & (gray >= 94)),
+        ("silver-graphite", "#ADADAF", silhouette & (gray >= 140)),
     ]
     return width, height, [(name, color, mask[y0:y1, x0:x1]) for name, color, mask in layers]
 
@@ -185,11 +133,11 @@ def main() -> None:
         svg.append("</svg>")
     paths = {ext: OUT / f"{NAME}.{ext}" for ext in ("svg", "eps", "png")}
     paths["svg"].write_text("\n".join(svg) + "\n", encoding="utf-8")
-    for ext, args in [("eps", ["--export-area-page"]), ("png", ["--export-dpi=600"])]:
-        subprocess.run(
-            [str(INK / "inkscape.com"), str(paths["svg"]), f"--export-filename={paths[ext]}", *args],
-            check=True,
-        )
+    shutil.copyfile(SOURCE, paths["png"])
+    subprocess.run(
+        [str(INK / "inkscape.com"), str(paths["svg"]), f"--export-filename={paths['eps']}", "--export-area-page"],
+        check=True,
+    )
     eps = paths["eps"]
     eps.write_bytes(b"\n".join(line.rstrip() for line in eps.read_bytes().split(b"\n")))
     with zipfile.ZipFile(PRODUCTION / f"{NAME}.zip", "w", zipfile.ZIP_DEFLATED) as archive:
